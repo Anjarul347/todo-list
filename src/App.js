@@ -1,11 +1,11 @@
 import './App.css';
-import React from 'react';
+import React from 'react'
 import ListItems from './ListItems';
-import {library } from '@fortawesome/fontawesome-svg-core';
+import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-
 library.add(faTrash);
+
 
 
 class App extends React.Component { 
@@ -20,8 +20,9 @@ class App extends React.Component {
       }
     }
     this.handleInput = this.handleInput.bind(this); 
-    this.addItem = this.addItem.bind(this);
-    this.deleteItem=this.deleteItem.bind(this);
+    this.addItem = this.addItem.bind(this); 
+    this.deleteItem = this.deleteItem.bind(this); 
+    this.setUpdate = this.setUpdate.bind(this); 
 
 
   }
@@ -41,7 +42,7 @@ class App extends React.Component {
     const newItem = this.state.currentItem;
     console.log(newItem);
     if (newItem.text !== ""){
-      const newItems = [...this.state.items, newItem];
+      const newItems = [...this.state.item, newItem];
       this.setState({
         item: newItems,
         currentItem: {
@@ -51,19 +52,28 @@ class App extends React.Component {
       })
     }
   }
-
-  deleteItem(key){
-    const filterItems = this.state.items.filter(item => item.key !== key);
+  deleteItem(key) {
+    const filterItems = this.state.item.filter(item => item.key !== key);
     this.setState({
-      items:filterItems,
+      item: filterItems,
     })
   }
-
-
+  setUpdate(text, key) {
+    const items = this.state.item;
+    items.map(item => {
+      if (item.key === key) {
+        item.text = text;
+      }
+    })
+    this.setState({
+      item:items,
+    })
+  }
   render() {
     return(
       <div className='App'>
-        <header>
+        <h1 className="HeadText">Todo List</h1><br/>
+        <header className="head">
         <form id='to-do-form' onSubmit={this.addItem}>
             <input type="text" placeholder='Enter Text'
               value={this.state.currentItem.text}
@@ -72,14 +82,18 @@ class App extends React.Component {
         <button type='submit'>Add</button>
         </form>
         </header>
-          <ListItems items= {this.state.items}
-          deleteItem = {this.deleteItem}
-          >
-
-
-          </ListItems>
+        <ListItems items={this.state.item}
+          deleteItem={this.deleteItem}
+          setUpdate = {this.setUpdate}
+        >
+          
+          
+        </ListItems>
       </div>
     )
   }
 }
 export default App;
+
+
+
